@@ -1,34 +1,36 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
+int Diff(string row)
+{
+	int Read;
+	vector<int> Line;
+	istringstream Stg(row);
+	int iMin, iMax;
+	while(Stg >> Read)
+	{
+		Line.push_back(Read);
+	}
+	iMin = *(min_element(Line.begin(), Line.end()));
+	iMax = *(max_element(Line.begin(), Line.end()));
+	return iMax - iMin;
+}
 int main()
 {
+	string Line;
 	vector<vector<int>> Readed(16);
 	ifstream myfile("t2input.txt");
 	int Read;
 	int k = 0;
-	while (myfile >> Read) 
+	int Sum = 0;
+	while (getline(myfile, Line)) 
 	{
-		Readed[k/16].push_back(Read);
-		k++;
+		Sum += Diff(Line);
 	}
-	int iMin, iMax;
-	int iSum = 0;
-	for (int i = 0; i< 16; i++)
-	{
-		iMin = Readed[i][0];
-		iMax = Readed[i][0];
-		for (int j = 0; j < 16; j++)
-		{
-			if (Readed[i][j] > iMax)
-				iMax = Readed[i][j];
-			if (Readed[i][j] < iMin)
-				iMin = Readed[i][j];
-		}
-		iSum += (iMax - iMin);
-	}
-	cout<<iSum;
+	cout<<Sum;
 	return 0;
 }
